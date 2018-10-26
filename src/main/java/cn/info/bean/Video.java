@@ -27,7 +27,7 @@ public class Video {
     /**
      * 年份
      */
-    private int year;
+    private String year;
 
     /**
      * 主演
@@ -75,14 +75,14 @@ public class Video {
     private String src;
 
     /**
-     * 是否完结
+     * 是否完结0-未完结，1-完结
      */
     private Integer finished;
 
     /**
      * 最近的一集
      */
-    private Integer lastNum;
+    private String lastNum;
 
     /**
      * 状态
@@ -129,11 +129,11 @@ public class Video {
         this.remark = remark;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -201,11 +201,11 @@ public class Video {
         this.finished = finished;
     }
 
-    public Integer getLastNum() {
+    public String getLastNum() {
         return lastNum;
     }
 
-    public void setLastNum(Integer lastNum) {
+    public void setLastNum(String lastNum) {
         this.lastNum = lastNum;
     }
 

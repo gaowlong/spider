@@ -6,11 +6,7 @@ package cn.info.bean;
  */
 public class Episode {
 
-    /**
-     * 第几集
-     */
-    private String number;
-
+    private Long id;
     /**
      * 清晰度用
      */
@@ -41,13 +37,6 @@ public class Episode {
      */
     private String md5 ;
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
     public String getClarity() {
         return clarity;
@@ -100,7 +89,6 @@ public class Episode {
     @Override
     public String toString() {
         return "Episode{" +
-                "number='" + number + '\'' +
                 ", clarity='" + clarity + '\'' +
                 ", src='" + src + '\'' +
                 ", url='" + url + '\'' +

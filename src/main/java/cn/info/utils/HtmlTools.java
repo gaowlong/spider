@@ -5,7 +5,6 @@ import cn.info.bean.Video;
 import cn.info.constant.Constant;
 import cn.info.regex.RegexTools;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,12 +13,9 @@ import org.jsoup.select.Elements;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * HTML解析器
@@ -148,6 +144,7 @@ public class HtmlTools {
         String []tags = url.split("#");
         Episode episode;
         String src = "";
+        String md5 = DigestUtils.md5Hex(name);
         List<Episode> list = new ArrayList<>();
         for(String str : tags) {
             if(!StringUtil.isBlank(str)) {
@@ -158,14 +155,14 @@ public class HtmlTools {
                     episode.setClarity(arr[2]);
                     episode.setUrl(arr[3]);
                     episode.setSign(arr[4]);
-                    episode.setMd5(DigestUtils.md5Hex(name));
+                    episode.setMd5(md5);
                     episode.setSrc(arr[0]);
                 }else {
                     String []arr = str.split("\\$");
                     episode.setClarity(arr[0]);
                     episode.setUrl(arr[1]);
                     episode.setSign(arr[2]);
-                    episode.setMd5(DigestUtils.md5Hex(name));
+                    episode.setMd5(md5);
                     episode.setSrc(src);
                 }
                 System.out.println(episode.toString());
@@ -185,7 +182,6 @@ public class HtmlTools {
        List<Episode> list = new ArrayList<>();
        for(String str : arr) {
            if(!StringUtil.isBlank(str)) {
-               //System.out.println(str);
                list.addAll(episodeMovie(str,name));
            }
        }
@@ -219,8 +215,6 @@ public class HtmlTools {
     public static void main(String[] args) {
         String regex = ".*《(.*)》.*";
         String title = "《天乩之白蛇传说》全集免费在线观看_电视剧_达达兔电影网";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(title);
         System.out.println(RegexTools.matchFirst(title,regex));
     }
 

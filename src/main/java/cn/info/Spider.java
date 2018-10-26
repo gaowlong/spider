@@ -1,7 +1,11 @@
 package cn.info;
 
-import cn.info.utils.HttpConnectionTools;
 
+import cn.info.constant.Constant;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.*;
 
 /**
@@ -22,26 +26,45 @@ public class Spider {
 
     private static String url6 = "https://www.dadatu.co/gc/tianjizhibaishechuanshuo/play-0-0.html";
 
+    private static String url7 = "https://www.dadatu.co/zy/index.html";
+
+    private static String url8 = "https://www.dadatu.co/zy/huoxingqingbaojudisanji/";
+
+    private static String url9 = "https://www.dadatu.co/zy/huoxingqingbaojudisanji/play-0-0.html";
+
+    /**
+     * 在爬取数据时用来存储获取的链接(非重复的)
+     */
+    private Set<String> urls = Collections.synchronizedSet(new HashSet<String>());
+
+    /**
+     * 用于存放所有的url，同时在处理时从队列中弹出
+     */
+    private LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+
     /**
      * 默认开10个线程处理
      */
-    private static Executor threadPool = new ThreadPoolExecutor(2, 10,
+    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 10,
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>());
 
 
     public static void main(String[] args) throws Exception {
-        System.out.println(HttpConnectionTools.document(url6));
+        new Spider().run(Constant.HOME);
     }
 
 
-
-
-
-
-
-
-
+    /**
+     * 开始执行爬取任务
+     * @param url
+     */
+    public void run(String url) {
+        urls.add(url);
+        queue.offer(url);
+        threadPool.execute(new SpiderTask(urls,threadPool,queue));
+        System.out.println(threadPool.getCompletedTaskCount());
+    }
 
 
 }
