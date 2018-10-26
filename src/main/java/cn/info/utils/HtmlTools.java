@@ -1,8 +1,10 @@
 package cn.info.utils;
 
+import cn.info.bean.Episode;
 import cn.info.bean.Video;
 import cn.info.constant.Constant;
 import cn.info.regex.RegexTools;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
@@ -11,9 +13,13 @@ import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * HTML解析器
@@ -48,24 +54,22 @@ public class HtmlTools {
      * @param document
      * @return
      */
-    public static Set<String> videoUrls(Document document) {
+    public static List<Episode> videoUrls(Document document) {
         if(document == null) return null;
-        Set<String> sets = new HashSet<>();
+        String title = title(document);
+        if(StringUtil.isBlank(title))return null;
+        List<Episode> list ;
         String urls = RegexTools.matchFirst(document.toString(),RegexTools.SCRIPT_REGEX);
         if(StringUtil.isBlank(urls))return null;
         urls = urls.replaceAll("%(?![0-9a-fA-F]{2})", "%25");
         try {
             urls = URLDecoder.decode(urls, "UTF-8");
-            for(String str : urls.split("\\$")) {
-                if(str.contains("https")) {
-                    sets.add(str);
-                }
-            }
+            list = episodes(urls,title);
         } catch (UnsupportedEncodingException e) {
             //TODO 解析失败记录日志记录日志
             return null;
         }
-        return sets;
+        return list;
     }
 
     /**
@@ -78,20 +82,19 @@ public class HtmlTools {
         Video video = new Video();
         Elements elements = document.getElementsByClass(Constant.VIDEO_INFO_CLASS);
         if(null == elements)return null;
+        //图片
         Elements imgEle = elements.select(".videopic");
         if(imgEle == null) return null;
         String style = imgEle.attr("style").toString();
         if(StringUtil.isBlank(style))return null;
         String img = RegexTools.matchFirst(style,RegexTools.IMG_REGEX);
         video.setImg(img);
-        Elements nameEle = elements.select("h3");
-        if(nameEle != null) {
-            String name = nameEle.text();
-            video.setName(name.trim());
-            video.setMd5(Md5Crypt.md5Crypt(name.trim().getBytes()));
-        }else {
-            return null;
-        }
+        //title
+        String title = title(document);
+        if(StringUtil.isBlank(title))return null;
+        video.setName(title);
+        video.setMd5(DigestUtils.md5Hex(title));
+        //电影/电视/信息
         Elements liEle = elements.select("li");
         if(liEle != null) {
             for (Element li : liEle ) {
@@ -135,6 +138,90 @@ public class HtmlTools {
         if(field.contains(Constant.VIDEO_DESC)) {
             video.setDesc(desc);
         }
+    }
+
+    /**
+     * 获取url和描述
+     * @param url
+     */
+    public static List<Episode> episodeMovie(String url, String name) {
+        String []tags = url.split("#");
+        Episode episode;
+        String src = "";
+        List<Episode> list = new ArrayList<>();
+        for(String str : tags) {
+            if(!StringUtil.isBlank(str)) {
+                episode = new Episode();
+                if(str.contains(Constant.SPLIT_SIGN)) {//第一个特殊处理
+                    String []arr = str.split("\\$");
+                    src = arr[0];
+                    episode.setClarity(arr[2]);
+                    episode.setUrl(arr[3]);
+                    episode.setSign(arr[4]);
+                    episode.setMd5(DigestUtils.md5Hex(name));
+                    episode.setSrc(arr[0]);
+                }else {
+                    String []arr = str.split("\\$");
+                    episode.setClarity(arr[0]);
+                    episode.setUrl(arr[1]);
+                    episode.setSign(arr[2]);
+                    episode.setMd5(DigestUtils.md5Hex(name));
+                    episode.setSrc(src);
+                }
+                System.out.println(episode.toString());
+                list.add(episode);
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取url和描述
+     * @param url
+     */
+    public static List<Episode> episodeTv(String url, String name) {
+       String []arr = url.split("\\$\\$\\$");
+       List<Episode> list = new ArrayList<>();
+       for(String str : arr) {
+           if(!StringUtil.isBlank(str)) {
+               //System.out.println(str);
+               list.addAll(episodeMovie(str,name));
+           }
+       }
+       return list;
+    }
+
+    /**
+     * 解析出播放信息
+     * @param addr
+     * @param name
+     * @return
+     */
+    public static List<Episode> episodes(String addr,String name) {
+        if(StringUtil.isBlank(addr) || !addr.contains("#") || !addr.contains("$"))
+            return null;
+        if(addr.contains("$$$")) {//电视剧
+            return episodeTv(addr,name);
+        }else{
+            return episodeMovie(addr,name);
+        }
+    }
+
+    public static String title(Document document) {
+        if(document == null)return null;
+        String title = document.title();
+        if(StringUtil.isBlank(title) || !title.contains("《"))return null;
+        title = RegexTools.matchFirst(title,RegexTools.TITLE_REGEX);
+        return title;
+    }
+
+    public static void main(String[] args) {
+        String regex = ".*《(.*)》.*";
+        String title = "《天乩之白蛇传说》全集免费在线观看_电视剧_达达兔电影网";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(title);
+        System.out.println(RegexTools.matchFirst(title,regex));
     }
 
 

@@ -1,5 +1,7 @@
 package cn.info;
 
+import cn.info.utils.HttpConnectionTools;
+
 import java.util.concurrent.*;
 
 /**
@@ -8,15 +10,17 @@ import java.util.concurrent.*;
 public class Spider {
 
 
-    private String url1 = "https://www.dadatu.co/dz/direnjiezhichiyouxueteng/play-0-1.html";
+    private static String url1 = "https://www.dadatu.co/dz/direnjiezhichiyouxueteng/play-0-1.html";
 
-    private String url2 = "https://www.dadatu.co/dz/diezhongdie6/play-0-1.html";
+    private static String url2 = "https://www.dadatu.co/dz/diezhongdie6/play-0-1.html";
 
-    private String url3 = "https://www.dadatu.co/dz/diezhongdie6/";
+    private static String url3 = "https://www.dadatu.co/dz/diezhongdie6/";
 
-    private String url4 = "https://www.dadatu.co/gc/yanxigonglue/play-0-0.html";
+    private static String url4 = "https://www.dadatu.co/gc/yanxigonglue/play-0-0.html";
 
-    private String url5 = "https://www.dadatu.co/gc/tianjizhibaishechuanshuo/";
+    private static String url5 = "https://www.dadatu.co/gc/tianjizhibaishechuanshuo/";
+
+    private static String url6 = "https://www.dadatu.co/gc/tianjizhibaishechuanshuo/play-0-0.html";
 
     /**
      * 默认开10个线程处理
@@ -27,7 +31,7 @@ public class Spider {
 
 
     public static void main(String[] args) throws Exception {
-
+        System.out.println(HttpConnectionTools.document(url6));
     }
 
 

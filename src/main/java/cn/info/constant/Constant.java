@@ -29,6 +29,8 @@ public class Constant {
 
     public final static String VIDEO_DESC = "剧情";
 
+    public final static String SPLIT_SIGN = "$$";
 
+    public final static String TV_REGEX = "\\$$$";
 
 }

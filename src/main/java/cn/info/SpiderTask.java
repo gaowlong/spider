@@ -1,5 +1,6 @@
 package cn.info;
 
+import cn.info.utils.DataTools;
 import cn.info.utils.HtmlTools;
 import cn.info.utils.HttpConnectionTools;
 import org.jsoup.nodes.Document;
@@ -55,9 +56,13 @@ public class SpiderTask implements Runnable {
             //提取页面上所有的url
             HtmlTools.urls(document,urls,queue);
             //提取页面上的视频信息,此处需要存到数据库
-            //HtmlTools.videoInfo(document);
+            if(DataTools.urlLevel(url) == 2) {
+                HtmlTools.videoInfo(document);
+            }
             //提取页面上所有的视频源信息，此处需要更新到数据库
-            //HtmlTools.videoUrls(document);
+            if(DataTools.urlLevel(url) == 3) {
+                HtmlTools.videoUrls(document);
+            }
         }
     }
 }

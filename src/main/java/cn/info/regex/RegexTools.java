@@ -15,7 +15,16 @@ public class RegexTools {
      */
     public final static String SCRIPT_REGEX = "unescape\\(\"(.*)\"\\)";
 
+    /**
+     * 提取页面中图片地址
+     */
     public final static String IMG_REGEX = "url\\((.*)\\)";
+
+    /**
+     * 提取页面中title
+     */
+    public final static String TITLE_REGEX = ".*《(.*)》.*";
+
 
     /**
      * 返回所有匹配正则的字符串
