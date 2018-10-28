@@ -27,5 +27,6 @@ CREATE TABLE `episode` (
   `SIGN` varchar(40) DEFAULT NULL COMMENT '标记',
   `USABLE` int(2) DEFAULT '0' COMMENT '是否有效0-有效，1-无效',
   `MD5` varchar(60) DEFAULT NULL COMMENT 'name的md5值',
+  `MD55` varchar(60) DEFAULT NULL COMMENT 'url的md5值',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

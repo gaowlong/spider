@@ -2,6 +2,7 @@ package cn.info;
 
 
 import cn.info.constant.Constant;
+import cn.info.utils.HttpConnectionTools;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +33,8 @@ public class Spider {
 
     private static String url9 = "https://www.dadatu.co/zy/huoxingqingbaojudisanji/play-0-0.html";
 
+    private static String url10 = "https://www.dadatu.co/xj/kuaibawogedaizou/play-0-0.html";
+
     /**
      * 在爬取数据时用来存储获取的链接(非重复的)
      */
@@ -42,10 +45,12 @@ public class Spider {
      */
     private LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
 
+    private final static Integer MAX_LENGTH = 5000;
+
     /**
      * 默认开10个线程处理
      */
-    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 10,
+    private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(6, 10,
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<Runnable>());
 
@@ -63,7 +68,6 @@ public class Spider {
         urls.add(url);
         queue.offer(url);
         threadPool.execute(new SpiderTask(urls,threadPool,queue));
-        System.out.println(threadPool.getCompletedTaskCount());
     }
 
 

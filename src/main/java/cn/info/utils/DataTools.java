@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
  */
 public class DataTools  {
 
-    private static String url1 = "https://www.dadatu.co/dz/direnjiezhichiyouxueteng/play-0-1.html";
 
     /**
      * Unicode转 汉字字符串
@@ -44,7 +43,6 @@ public class DataTools  {
         if(StringUtil.isBlank(url) || (url.lastIndexOf("/") == -1)) return 0;
         if(url.endsWith("/"))url = url.substring(0,url.length()-1);
         int length = url.split("\\/").length;
-        System.out.println(length);
         if(length <= 3)return 1;
         return length -3;
     }

@@ -36,9 +36,9 @@ public class HtmlTools {
             String href ;
             for(Element element : elements) {
                 href = element.attr("href");
-                if(!href.contains("http")) {
+                if(!href.contains("http") && !href.contains(Constant.JS)) {
                     if(urls.add(href)) {
-                        queue.offer(href);
+                        queue.offer(Constant.HOME+href);
                     }
                 }
             }
@@ -112,27 +112,30 @@ public class HtmlTools {
      */
     private static void videoFiled(String field,Video video) {
         if(StringUtil.isBlank(field) || (field.indexOf("：") == -1))return;
-        String desc = field.split("：")[1];
-        if(field.contains(Constant.VIDEO_STATUS)) {
-            video.setStatus(desc);
-        }
-        if(field.contains(Constant.VIDEO_DIRECTOR)) {
-            video.setDirector(desc);
-        }
-        if(field.contains(Constant.VIDEO_ACTORS)) {
-            video.setActors(desc);
-        }
-        if(field.contains(Constant.VIDEO_LOCATION)) {
-            video.setLocation(desc);
-        }
-        if(field.contains(Constant.VIDEO_CATEGORY)) {
-            video.setCategory(desc);
-        }
-        if(field.contains(Constant.VIDEO_LANGUAGE)) {
-            video.setLanguage(desc);
-        }
-        if(field.contains(Constant.VIDEO_DESC)) {
-            video.setDesc(desc);
+        String [] arr = field.split("：");
+        if(arr.length > 1) {
+            String desc = arr[1];
+            if (field.contains(Constant.VIDEO_STATUS)) {
+                video.setStatus(desc);
+            }
+            if (field.contains(Constant.VIDEO_DIRECTOR)) {
+                video.setDirector(desc);
+            }
+            if (field.contains(Constant.VIDEO_ACTORS)) {
+                video.setActors(desc);
+            }
+            if (field.contains(Constant.VIDEO_LOCATION)) {
+                video.setLocation(desc);
+            }
+            if (field.contains(Constant.VIDEO_CATEGORY)) {
+                video.setCategory(desc);
+            }
+            if (field.contains(Constant.VIDEO_LANGUAGE)) {
+                video.setLanguage(desc);
+            }
+            if (field.contains(Constant.VIDEO_STORY)) {
+                video.setStory(desc);
+            }
         }
     }
 
@@ -152,18 +155,20 @@ public class HtmlTools {
                 if(str.contains(Constant.SPLIT_SIGN)) {//第一个特殊处理
                     String []arr = str.split("\\$");
                     src = arr[0];
-                    episode.setClarity(arr[2]);
+                    episode.setClarity(DataTools.unicodeToString(arr[2]));
                     episode.setUrl(arr[3]);
                     episode.setSign(arr[4]);
                     episode.setMd5(md5);
-                    episode.setSrc(arr[0]);
+                    episode.setMd55(DigestUtils.md5Hex(episode.getUrl()));
+                    episode.setSrc(DataTools.unicodeToString(arr[0]));
                 }else {
                     String []arr = str.split("\\$");
-                    episode.setClarity(arr[0]);
+                    episode.setClarity(DataTools.unicodeToString(arr[0]));
                     episode.setUrl(arr[1]);
                     episode.setSign(arr[2]);
                     episode.setMd5(md5);
-                    episode.setSrc(src);
+                    episode.setMd55(DigestUtils.md5Hex(episode.getUrl()));
+                    episode.setSrc(DataTools.unicodeToString(src));
                 }
                 System.out.println(episode.toString());
                 list.add(episode);

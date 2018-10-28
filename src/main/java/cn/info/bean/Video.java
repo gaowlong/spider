@@ -57,7 +57,7 @@ public class Video {
     /**
      * 剧情：古装、爱情
      */
-    private String desc;
+    private String story;
 
     /**
      * 图片
@@ -77,7 +77,7 @@ public class Video {
     /**
      * 是否完结0-未完结，1-完结
      */
-    private Integer finished;
+    private Integer finished = 0;
 
     /**
      * 最近的一集
@@ -169,12 +169,12 @@ public class Video {
         this.language = language;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getStory() {
+        return story;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setStory(String story) {
+        this.story = story;
     }
 
     public String getImg() {
@@ -238,7 +238,7 @@ public class Video {
                 ", classify='" + classify + '\'' +
                 ", category='" + category + '\'' +
                 ", language='" + language + '\'' +
-                ", desc='" + desc + '\'' +
+                ", story='" + story + '\'' +
                 ", img='" + img + '\'' +
                 ", remark='" + remark + '\'' +
                 ", src='" + src + '\'' +

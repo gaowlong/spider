@@ -30,12 +30,12 @@ CREATE TABLE `video` (
   `CLASSIFY` varchar(40) DEFAULT NULL COMMENT '分类：电影、电视、动漫',
   `CATEGORY` varchar(60) DEFAULT NULL COMMENT '类型：国产剧、美剧',
   `LANGUAGE` varchar(20) DEFAULT NULL COMMENT '语言：中文、粤语',
-  `DESC` varchar(200) DEFAULT NULL COMMENT '剧情：古装、爱情',
+  `STORY` varchar(200) DEFAULT NULL COMMENT '剧情：古装、爱情',
   `IMG` varchar(200) DEFAULT NULL COMMENT '图片',
   `REMARK` varchar(255) DEFAULT NULL COMMENT '详情：剧情介绍',
   `SRC` varchar(20) DEFAULT NULL COMMENT '来源',
   `FINISHED` int(1) DEFAULT '0' COMMENT '是否完结0-未完结，1-完结',
   `LASTNUM` varchar(10) DEFAULT NULL COMMENT '最新剧集',
-  `STATUS` varchar(10) DEFAULT NULL COMMENT '状态',
+  `STATUS` varchar(100) DEFAULT NULL COMMENT '状态',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

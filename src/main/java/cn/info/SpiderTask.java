@@ -2,6 +2,10 @@ package cn.info;
 
 import cn.info.bean.Episode;
 import cn.info.bean.Video;
+import cn.info.dao.EpisodeDao;
+import cn.info.dao.VideoDao;
+import cn.info.service.EpisodeService;
+import cn.info.service.VideoService;
 import cn.info.utils.DataTools;
 import cn.info.utils.HtmlTools;
 import cn.info.utils.HttpConnectionTools;
@@ -52,26 +56,40 @@ public class SpiderTask implements Runnable {
     public void run() {
         if(!queue.isEmpty()) {
             String url = queue.poll();
-            Document document = HttpConnectionTools.document(url);
-            if(null == document) { //如果获取连接失败则url返回队列等待下次执行
-               queue.offer(url);
-               return;
-            }
-            //提取页面上所有的url
-            HtmlTools.urls(document,urls,queue);
-            //提取页面上的视频信息,此处需要存到数据库
-            if(DataTools.urlLevel(url) == 2) {
-                Video video = HtmlTools.videoInfo(document);
-                //TODO 此处需要存储
-            }
-            //提取页面上所有的视频源信息，此处需要更新到数据库
-            if(DataTools.urlLevel(url) == 3) {
-                List<Episode> list = HtmlTools.videoUrls(document);
-                //TODO 此处需要存储
-            }
-            //TODO 判断队列中是否还要url，如果有继续向线程池添加任务
-            if(!queue.isEmpty()) {
-                threadPool.execute(new SpiderTask(urls,threadPool,queue));
+            try {
+                Thread.sleep(150);
+                Document document = HttpConnectionTools.document(url);
+                if(null == document) { //如果获取连接失败则url返回队列等待下次执行
+                   queue.offer(url);
+                   return;
+                }
+                //提取页面上所有的url
+                HtmlTools.urls(document,urls,queue);
+                //提取页面上的视频信息,此处需要存到数据库
+                if(DataTools.urlLevel(url) == 2) {
+                    Video video = HtmlTools.videoInfo(document);
+                    //TODO 此处需要存储
+                    VideoService.insertVideo(video);
+                }
+                //提取页面上所有的视频源信息，此处需要更新到数据库
+                if(DataTools.urlLevel(url) == 3) {
+                    List<Episode> list = HtmlTools.videoUrls(document);
+                    EpisodeService.insertEpisode(list);
+                    //TODO 此处需要存储
+                }
+                //TODO 判断队列中是否还要url，如果有继续向线程池添加任务
+                System.out.println("线程池状态："+threadPool.toString());
+                if(!queue.isEmpty()) {
+                    threadPool.execute(new SpiderTask(urls,threadPool,queue));
+                    threadPool.execute(new SpiderTask(urls,threadPool,queue));
+                }
+                System.out.println("解析完链接："+url);
+            }catch (Exception e) {
+                System.out.println("发生异常"+e.getMessage());
+               //TOOD 记录异常
+                if(!queue.isEmpty() ) {
+                    threadPool.execute(new SpiderTask(urls,threadPool,queue));
+                }
             }
         }
     }

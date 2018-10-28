@@ -37,6 +37,11 @@ public class Episode {
      */
     private String md5 ;
 
+    /**
+     * 当前视频链接的md5码用来确定唯一性
+     */
+    private String md55;
+
 
     public String getClarity() {
         return clarity;
@@ -86,15 +91,33 @@ public class Episode {
         this.sign = sign;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMd55() {
+        return md55;
+    }
+
+    public void setMd55(String md55) {
+        this.md55 = md55;
+    }
+
     @Override
     public String toString() {
         return "Episode{" +
+                "id=" + id +
                 ", clarity='" + clarity + '\'' +
                 ", src='" + src + '\'' +
                 ", url='" + url + '\'' +
                 ", sign='" + sign + '\'' +
                 ", usable=" + usable +
                 ", md5='" + md5 + '\'' +
+                ", md55='" + md55 + '\'' +
                 '}';
     }
 }

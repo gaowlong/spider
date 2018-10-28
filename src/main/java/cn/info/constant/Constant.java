@@ -11,7 +11,7 @@ public class Constant {
 
     public final static String SCRIPT = "script";
 
-    public final static String HOME = "https://www.dadatu.co/";
+    public final static String HOME = "https://www.dadatu.co";
 
     public final static String DADATU_SRC = "dadatu";
 
@@ -27,10 +27,12 @@ public class Constant {
 
     public final static String VIDEO_LANGUAGE = "语言";
 
-    public final static String VIDEO_DESC = "剧情";
+    public final static String VIDEO_STORY = "剧情";
 
     public final static String SPLIT_SIGN = "$$";
 
     public final static String TV_REGEX = "\\$$$";
+
+    public final static String JS = "javascript";
 
 }
