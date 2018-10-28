@@ -9,14 +9,13 @@ import java.sql.SQLException;
  */
 public class DbTools {
 
-    //public final static String url = "jdbc:mysql://97.64.18.141:3306/spider?useUnicode=true&characterEncoding=UTF-8";
     private final static String url = "jdbc:mysql://127.0.0.1:3306/spider?useUnicode=true&characterEncoding=UTF-8";
 
     public final static String driver = "com.mysql.jdbc.Driver";
 
     public final static String username = "root";
 
-    public final static String password = "654321";
+    public final static String password = "323423";
 
     /**
      * 获取连接
