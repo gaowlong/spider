@@ -68,16 +68,14 @@ public class SpiderTask implements Runnable {
                 //提取页面上的视频信息,此处需要存到数据库
                 if(DataTools.urlLevel(url) == 2) {
                     Video video = HtmlTools.videoInfo(document);
-                    //TODO 此处需要存储
                     VideoService.insertVideo(video);
                 }
                 //提取页面上所有的视频源信息，此处需要更新到数据库
                 if(DataTools.urlLevel(url) == 3) {
                     List<Episode> list = HtmlTools.videoUrls(document);
                     EpisodeService.insertEpisode(list);
-                    //TODO 此处需要存储
+
                 }
-                //TODO 判断队列中是否还要url，如果有继续向线程池添加任务
                 System.out.println("线程池状态："+threadPool.toString());
                 if(!queue.isEmpty()) {
                     threadPool.execute(new SpiderTask(urls,threadPool,queue));
